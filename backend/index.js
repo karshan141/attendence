@@ -20,5 +20,29 @@ app.get("/", (req, res) => {
 });
 
 
-const connectDb = require("./config/database");
-connectDb();
+
+const database = require("./config/database");
+database.connect();
+
+const User = require("./models/User");
+
+
+
+// /*---- add Test admin in user collections
+
+// const newUser = new User({
+//   username: "admin",
+//   password: "12345",
+//   role: "superAdmin",
+// });
+
+// newUser.save().then((err, data) => {
+//   if (!err) {
+//     console.log(data);
+//     res.send(data);
+//   }
+// }); ------- */
+
+
+
+
