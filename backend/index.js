@@ -8,6 +8,8 @@ app.use(express.json());
 
 require("dotenv").config();
 
+const userRoutes = require("./routes/user");
+
 const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
@@ -26,6 +28,7 @@ database.connect();
 
 const User = require("./models/User");
 
+app.use("/user", userRoutes);
 
 
 // /*---- add Test admin in user collections

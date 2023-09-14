@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaEyeSlash ,FaEye} from "react-icons/fa";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
+import axios from "axios";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -16,17 +17,33 @@ const Login = () => {
     });
   };
 
-  const handelLogin = (e) => {
+  const handelLogin = async (e) => {
     e.preventDefault();
+
+    const url = "http://localhost:4000/user/login";
+    const data = {
+      username: loginData.userName,
+      password: loginData.password,
+    };
+
+    axios
+      .post(url, data)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        // Handle errors here
+      });
+
     setLoginData({
       userName: "",
       password: "",
     });
   };
 
-//   const handelShowHide = () =>{
-//     setShowHidePass(!showHidePass);
-//   }
+  //   const handelShowHide = () =>{
+  //     setShowHidePass(!showHidePass);
+  //   }
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-teal-500">
@@ -50,7 +67,7 @@ const Login = () => {
               <label className="font-bold text-2xl text-start">Password</label>
               <div className="flex relative items-center">
                 <input
-                  type={showHidePass ?"password" : "text"}
+                  type={showHidePass ? "password" : "text"}
                   name="password"
                   placeholder="Enter User Name"
                   value={loginData.password}
@@ -59,17 +76,16 @@ const Login = () => {
                 />
 
                 {showHidePass ? (
-                    <FaEyeSlash
-                  className="absolute z-1 text-slate-900 right-0 text-xl p-2 rounded-r w-auto cursor-pointer bg-slate-600 h-full"
-                  onClick={()=>setShowHidePass(!showHidePass)}
-                />
-                )
-                
-                :(<FaEye
-                  className="absolute z-1 text-slate-900 right-0 text-xl p-2 rounded-r w-auto cursor-pointer bg-slate-600 h-full"
-                  onClick={()=>setShowHidePass(!showHidePass)}
-                />)}
-                
+                  <FaEyeSlash
+                    className="absolute z-1 text-slate-900 right-0 text-xl p-2 rounded-r w-auto cursor-pointer bg-slate-600 h-full"
+                    onClick={() => setShowHidePass(!showHidePass)}
+                  />
+                ) : (
+                  <FaEye
+                    className="absolute z-1 text-slate-900 right-0 text-xl p-2 rounded-r w-auto cursor-pointer bg-slate-600 h-full"
+                    onClick={() => setShowHidePass(!showHidePass)}
+                  />
+                )}
               </div>
             </div>
 
