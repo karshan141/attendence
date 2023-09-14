@@ -15,5 +15,5 @@ app.listen(PORT, () => {
 
 // test route for react app
 app.get("/",(req,res)=>{
-    res.send("Starter pack build successfuly");
+    res.send("Starter pack build successfuly 123");
 })
