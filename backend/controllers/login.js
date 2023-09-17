@@ -8,11 +8,11 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    //If username or password empty return
-    console.log(username);
+    
 
+    //If username or password empty return
     if (!username || !password) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: `Please Fill up All the Required Fields`,
       });
@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
 
     if (!user) {
       // Return 401 Unauthorized status code with error message
-      return res.status(401).json({
+      return res.status(201).json({
         success: false,
         message: `User is not Registered with Us Please SignUp to Continue`,
       });
@@ -51,7 +51,7 @@ exports.login = async (req, res) => {
         message: `User Login Success`,
       });
     } else {
-      return res.status(401).json({
+      return res.status(201).json({
         success: false,
         message: `Password is incorrect`,
       });

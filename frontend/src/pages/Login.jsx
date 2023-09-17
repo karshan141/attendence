@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaEyeSlash, FaEye } from "react-icons/fa";
-import axios from "axios";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../services/apiConnector";
+import { login } from "../services/apis";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -19,31 +21,32 @@ const Login = () => {
 
   const handelLogin = async (e) => {
     e.preventDefault();
+    
 
-    const url = "http://localhost:4000/user/login";
-    const data = {
+    const result = await axiosInstance.post(login.LOGIN_API, {
       username: loginData.userName,
       password: loginData.password,
-    };
+    });
+    const resData = result.data;
 
-    axios
-      .post(url, data)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        // Handle errors here
+    if (resData.success) {
+      toast.success("Login Successfuly Done");
+    } else {
+      toast(resData.message, {
+        icon: "👏",
+        style: {
+          borderRadius: "10px",
+          background: "#000",
+          color: "#fff",
+        },
       });
+    }
 
     setLoginData({
       userName: "",
       password: "",
     });
   };
-
-  //   const handelShowHide = () =>{
-  //     setShowHidePass(!showHidePass);
-  //   }
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center bg-teal-500">
