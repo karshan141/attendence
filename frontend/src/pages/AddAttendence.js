@@ -4,6 +4,7 @@ import axios from "axios";
 import { axiosInstance } from "../services/apiConnector";
 import { attendanceApis, employeeApis } from "../services/apis";
 import Sidebar from "../components/Sidebar";
+import toast from "react-hot-toast";
 
 const AddAttendence = () => {
   const [employees, setEmployees] = useState([]);
@@ -43,7 +44,13 @@ const AddAttendence = () => {
       date:selectedDate,
       attendanceData,
     });
-    console.log({ date: selectedDate, attendanceData });
+    
+    if(result.data.success){
+      toast.success(result.data.message);
+    }
+    else{
+      toast.error(result.data.message)
+    }
   };
 
   return (

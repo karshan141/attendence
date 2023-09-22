@@ -22,3 +22,8 @@ export const employeeApis = {
 export const attendanceApis = {
   ADDATTENDENCE_API: BASE_URL + "/user/addattendence",
 };
+
+
+export const weeklyOffApis = {
+  SETWEEKLYOFF_API : BASE_URL + "/user/addweeklyoff"
+}

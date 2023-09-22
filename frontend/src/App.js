@@ -6,6 +6,8 @@ import AddNewEployee from "./pages/AddNewEployee";
 import AddEmployeeCategory from "./pages/AddEmployeeCategory";
 import ViewAllEmployee from "./pages/ViewAllEmployee";
 import AddAttendence from "./pages/AddAttendence";
+import ShowAttendence from "./pages/ShowAttendence";
+import AddOffDay from "./pages/AddoffDay";
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
         <Route path="/addemployeecategory" element={<AddEmployeeCategory/>} />
         <Route path="/viewemployee" element={<ViewAllEmployee/>} />
 
+        <Route path="/addoffday" element={<AddOffDay/>} />
         <Route path="/addattendence" element={<AddAttendence/>} />
+        <Route path="/showattendence" element={<ShowAttendence/>} />
       </Routes>
       
     </div>

@@ -2,7 +2,8 @@ const express = require("express");
 const { login } = require("../controllers/login");
 const { addDesignation, getAllDesignation, deleteDesignation } = require("../controllers/designation");
 const { createEmployee, getAllEmployees } = require("../controllers/employee");
-const { addAttendence } = require("../controllers/attendence");
+const { addAttendence1, getAttendanceBetweenDates, addAttendance } = require("../controllers/attendence");
+const { setWeeklyOff } = require("../controllers/weeklyoff");
 const router = express.Router();
 
 router.post("/login", login);
@@ -21,6 +22,11 @@ router.delete("/deletedesignation/:id",deleteDesignation);
 
 //Routes for attendence
 
-router.post("/addattendence",addAttendence);
+router.post("/addattendence",addAttendance);
+router.get("/showattendence",getAttendanceBetweenDates);
+
+//Routes for weekly off
+
+router.post("/addweeklyoff",setWeeklyOff);
 
 module.exports = router;
