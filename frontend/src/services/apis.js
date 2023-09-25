@@ -23,7 +23,10 @@ export const attendanceApis = {
   ADDATTENDENCE_API: BASE_URL + "/user/addattendence",
 };
 
-
 export const weeklyOffApis = {
-  SETWEEKLYOFF_API : BASE_URL + "/user/addweeklyoff"
-}
+  SETWEEKLYOFF_API: BASE_URL + "/user/addweeklyoff",
+};
+
+export const paidHolidayApis = {
+  ADD_PAIHOLIDAY_API: BASE_URL + "/user/addph",
+};

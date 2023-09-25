@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../services/apiConnector";
 import { addNewCategory, getAllCategory } from "../services/apis";
 import ShowCategory from "../components/ShowCategory";
+import Navbar from "../components/Navbar";
 
 const AddEmployeeCategory = () => {
   const [designation, setDesignation] = useState("");
@@ -59,9 +60,11 @@ const AddEmployeeCategory = () => {
   };
 
   return (
+    <div>
+    <Navbar/>
     <div className="flex">
       <Sidebar />
-      <div className="container bg-[#E6E6E6]">
+      <div className="container bg-[#E6E6E6] pt-8">
         <div className="mt-12 bg-[#fff] m-4 py-6 px-12 rounded shadow">
           <form
             className="w-6/12 flex flex-col gap-4 justify-start"
@@ -101,6 +104,7 @@ const AddEmployeeCategory = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

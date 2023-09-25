@@ -8,6 +8,8 @@ import ViewAllEmployee from "./pages/ViewAllEmployee";
 import AddAttendence from "./pages/AddAttendence";
 import ShowAttendence from "./pages/ShowAttendence";
 import AddOffDay from "./pages/AddoffDay";
+import ShowEmployeeAttendence from "./pages/ShowEmployeeAttendence";
+import PaidHoliday from "./pages/PaidHoliday";
 
 function App() {
   return (
@@ -20,8 +22,13 @@ function App() {
         <Route path="/viewemployee" element={<ViewAllEmployee/>} />
 
         <Route path="/addoffday" element={<AddOffDay/>} />
+
+        <Route path="/paidholiday" element={<PaidHoliday/>}/>
+
         <Route path="/addattendence" element={<AddAttendence/>} />
         <Route path="/showattendence" element={<ShowAttendence/>} />
+
+        <Route path="/showemployeeattendence" element={<ShowEmployeeAttendence/>} />
       </Routes>
       
     </div>
