@@ -3,6 +3,9 @@ const Attendance = require("../models/Attendence"); // Import your attendance mo
 const WeeklyOff = require("../models/weeklyoff"); // Import Weeklyoff Model
 
 const PaidHoliday = require("../models/PaidHoliday"); // import paidholiday model
+
+const EmpPaidHoliday = require("../models/EmpPaidHoliday");
+
 const { formatDate } = require("../helper/commonuses");
 
 //const formatDate = require("../helper/commonuses"); // import helper function to formateDate
@@ -12,8 +15,6 @@ exports.addAttendance = async (req, res) => {
   try {
     const { date, attendanceData } = req.body;
 
-    
-
     // Validate data for each employee here (e.g., employee existence, status validity, etc.)
 
     // Create an array to store promises for saving attendance records
@@ -22,42 +23,54 @@ exports.addAttendance = async (req, res) => {
 
       // Check if the status is "Leave"
       if (status === "leave") {
-
         const phList = await PaidHoliday.find({
           date: {
             $gte: new Date(`${date.split("-")[0]}-01-01`),
             $lte: new Date(`${date.split("-")[0]}-12-31`),
           },
         })
+          .select({ date: 1 })
+          .sort({ date: 1 });
+
+        const utilizedPhListArray = await EmpPaidHoliday.find({
+          employee: employeeId,
+        })
           .select({ date: 1, _id: 0 })
           .sort({ date: 1 });
-        
-        const weeklyOffDocument = await WeeklyOff.findOne({
-          employee: employeeId,
-        });
-        const utilizedPHArray = weeklyOffDocument.utilizedPH;
-        
+
+        // const weeklyOffDocument = await WeeklyOff.findOne({
+        //   employee: employeeId,
+        // });
+        // const utilizedPHArray = weeklyOffDocument.utilizedPH;
+
         // console.log("Ph List", phList);
-        // // console.log("U Ph List", utilizedPHArray);
-        
+        // return console.log("U Ph List", utilizedPhListArray);
+
         let setPhDate = new Date();
-        if (utilizedPHArray.length === 0) {
+        if (utilizedPhListArray.length === 0) {
           setPhDate = phList[0].date;
+          setPhId = phList[0]._id;
         } else {
-          const currentDate = utilizedPHArray[utilizedPHArray.length - 1]; // Get the first date in the array
-        
+          const currentDate =
+            utilizedPhListArray[utilizedPhListArray.length - 1].date; // Get the first date in the array
+
           // Find the index of the current date in phList
-          const index = phList.findIndex((item) => item.date.getTime() === currentDate.getTime());          
-        
+          const index = phList.findIndex(
+            (item) => item.date.getTime() === currentDate.getTime()
+          );
+
           if (index !== -1 && index < phList.length - 1) {
             // Get the next date from phList
             setPhDate = phList[index + 1].date;
+            setPhId = phList[index + 1]._id;
+          }
+          else{
+            setPhDate = "3023-09-25T13:25:48.512Z";
           }
         }
-        
-        // return console.log("Next PH Date:", setPhDate);
-        
-         
+
+        console.log(phList);
+        // return console.log(setPhDate);
 
         if (setPhDate <= new Date(date)) {
           // Create a PH entry and decrement pending PH count
@@ -68,14 +81,13 @@ exports.addAttendance = async (req, res) => {
           });
 
           await newAttendance.save();
-          const result = await WeeklyOff.updateOne(
-            { employee: employeeId },
-            {
-              $push: {
-                utilizedPH: setPhDate,
-              },
-            }
-          );
+          const newPaidHoliday = new EmpPaidHoliday({
+            employee: employeeId,
+            paidHoliday: setPhId,
+            date: setPhDate,
+          });
+
+          await newPaidHoliday.save();
         } else {
           //return console.log(employeeId);
           // Find the employee's last weekly off date
@@ -274,4 +286,3 @@ exports.getEmployeeAttendanceBetweenDates = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
-
