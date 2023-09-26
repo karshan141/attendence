@@ -21,106 +21,115 @@ exports.addAttendance = async (req, res) => {
     const savePromises = attendanceData.map(async (attendanceData) => {
       const { employeeId, status } = attendanceData;
 
-      // Check if the status is "Leave"
-      if (status === "leave") {
-        const phList = await PaidHoliday.find({
-          date: {
-            $gte: new Date(`${date.split("-")[0]}-01-01`),
-            $lte: new Date(`${date.split("-")[0]}-12-31`),
-          },
-        })
-          .select({ date: 1 })
-          .sort({ date: 1 });
+      const isAttend = await Attendance.find({
+        employeeId,
+        date: new Date(date),
+      }).count();
 
-        const utilizedPhListArray = await EmpPaidHoliday.find({
-          employee: employeeId,
-        })
-          .select({ date: 1, _id: 0 })
-          .sort({ date: 1 });
+      //console.log("123", isAttend);
 
-        // const weeklyOffDocument = await WeeklyOff.findOne({
-        //   employee: employeeId,
-        // });
-        // const utilizedPHArray = weeklyOffDocument.utilizedPH;
+      if (!isAttend) {
+        // Check if the status is "Leave"
+        if (status === "leave") {
+          const phList = await PaidHoliday.find({
+            date: {
+              $gte: new Date(`${date.split("-")[0]}-01-01`),
+              $lte: new Date(`${date.split("-")[0]}-12-31`),
+            },
+          })
+            .select({ date: 1 })
+            .sort({ date: 1 });
 
-        // console.log("Ph List", phList);
-        // return console.log("U Ph List", utilizedPhListArray);
-
-        let setPhDate = new Date();
-        if (utilizedPhListArray.length === 0) {
-          setPhDate = phList[0].date;
-          setPhId = phList[0]._id;
-        } else {
-          const currentDate =
-            utilizedPhListArray[utilizedPhListArray.length - 1].date; // Get the first date in the array
-
-          // Find the index of the current date in phList
-          const index = phList.findIndex(
-            (item) => item.date.getTime() === currentDate.getTime()
-          );
-
-          if (index !== -1 && index < phList.length - 1) {
-            // Get the next date from phList
-            setPhDate = phList[index + 1].date;
-            setPhId = phList[index + 1]._id;
-          }
-          else{
-            setPhDate = "3023-09-25T13:25:48.512Z";
-          }
-        }
-
-        console.log(phList);
-        // return console.log(setPhDate);
-
-        if (setPhDate <= new Date(date)) {
-          // Create a PH entry and decrement pending PH count
-          const newAttendance = new Attendance({
-            employeeId,
-            date,
-            status: `ph ${formatDate(setPhDate)}`,
-          });
-
-          await newAttendance.save();
-          const newPaidHoliday = new EmpPaidHoliday({
+          const utilizedPhListArray = await EmpPaidHoliday.find({
             employee: employeeId,
-            paidHoliday: setPhId,
-            date: setPhDate,
-          });
+          })
+            .select({ date: 1, _id: 0 })
+            .sort({ date: 1 });
 
-          await newPaidHoliday.save();
-        } else {
-          //return console.log(employeeId);
-          // Find the employee's last weekly off date
-          const weeklyOff = await WeeklyOff.findOne({ employee: employeeId });
+          let setPhDate = new Date();
+          if (utilizedPhListArray.length === 0) {
+            setPhDate = phList[0].date;
+            setPhId = phList[0]._id;
+          } else {
+            const currentDate =
+              utilizedPhListArray[utilizedPhListArray.length - 1].date; // Get the first date in the array
 
-          if (weeklyOff) {
-            const lastOffDate = new Date(weeklyOff.lastOffDate);
+            // Find the index of the current date in phList
+            const index = phList.findIndex(
+              (item) => item.date.getTime() === currentDate.getTime()
+            );
 
-            const lastOffDate1 = new Date(lastOffDate);
-            // Add 7 days
-            const newDate = new Date(lastOffDate1);
-            newDate.setDate(newDate.getDate() + 7);
-
-            // Check if the last weekly off date is less than or equal to the current date
-            if (newDate <= new Date(date)) {
-              // Update the status as "Off" and store the last weekly off date
-              const newAttendance = new Attendance({
-                employeeId,
-                date: date,
-                status: `off ${formatDate(newDate)}`,
-                lastOff: newDate,
-              });
-
-              //return console.log(newAttendance);
-              weeklyOff.lastOffDate = newDate;
-
-              const data = await Promise.all([
-                newAttendance.save(),
-                weeklyOff.save(),
-              ]);
-              //return console.log(first)
+            if (index !== -1 && index < phList.length - 1) {
+              // Get the next date from phList
+              setPhDate = phList[index + 1].date;
+              setPhId = phList[index + 1]._id;
             } else {
-              // Create a leave record for that date
+              setPhDate = "3023-09-25T13:25:48.512Z";
+            }
+          }
+
+          // console.log(phList);
+          // return console.log(setPhDate);
+
+          if (setPhDate <= new Date(date)) {
+            // Create a PH entry and decrement pending PH count
+            const newAttendance = new Attendance({
+              employeeId,
+              date,
+              status: `ph ${formatDate(setPhDate)}`,
+            });
+
+            await newAttendance.save();
+            const newPaidHoliday = new EmpPaidHoliday({
+              employee: employeeId,
+              paidHoliday: setPhId,
+              date: setPhDate,
+            });
+
+            await newPaidHoliday.save();
+          } else {
+            //return console.log(employeeId);
+            // Find the employee's last weekly off date
+            const weeklyOff = await WeeklyOff.findOne({ employee: employeeId });
+
+            if (weeklyOff) {
+              const lastOffDate = new Date(weeklyOff.lastOffDate);
+
+              const lastOffDate1 = new Date(lastOffDate);
+              // Add 7 days
+              const newDate = new Date(lastOffDate1);
+              newDate.setDate(newDate.getDate() + 7);
+
+              // Check if the last weekly off date is less than or equal to the current date
+              if (newDate <= new Date(date)) {
+                // Update the status as "Off" and store the last weekly off date
+                const newAttendance = new Attendance({
+                  employeeId,
+                  date: date,
+                  status: `off ${formatDate(newDate)}`,
+                  lastOff: newDate,
+                });
+
+                //return console.log(newAttendance);
+                weeklyOff.lastOffDate = newDate;
+
+                const data = await Promise.all([
+                  newAttendance.save(),
+                  weeklyOff.save(),
+                ]);
+                //return console.log(first)
+              } else {
+                // Create a leave record for that date
+                const newAttendance = new Attendance({
+                  employeeId,
+                  date,
+                  status: "leave",
+                });
+
+                await newAttendance.save();
+              }
+            } else {
+              // Create a leave record for that date if no weekly off data is found
               const newAttendance = new Attendance({
                 employeeId,
                 date,
@@ -129,26 +138,19 @@ exports.addAttendance = async (req, res) => {
 
               await newAttendance.save();
             }
-          } else {
-            // Create a leave record for that date if no weekly off data is found
-            const newAttendance = new Attendance({
-              employeeId,
-              date,
-              status: "leave",
-            });
-
-            await newAttendance.save();
           }
+        } else {
+          // Create a new attendance record for status other than "Leave"
+          const newAttendance = new Attendance({
+            employeeId,
+            date,
+            status,
+          });
+
+          await newAttendance.save();
         }
       } else {
-        // Create a new attendance record for status other than "Leave"
-        const newAttendance = new Attendance({
-          employeeId,
-          date,
-          status,
-        });
-
-        await newAttendance.save();
+        console.log("false");
       }
     });
 
