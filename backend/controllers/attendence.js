@@ -215,6 +215,27 @@ exports.addAttendence1 = async (req, res) => {
   }
 };
 
+exports.getAttendanceSpecificDate = async (req, res) => {
+  try {
+    const { date } = req.query; // Assuming the date is passed as a query parameter
+
+    // Query the database to retrieve attendance data for the specified date
+    const attendanceData = await Attendance.find({ date });
+
+    // Return the attendance data as a JSON response
+    res.status(200).json({
+      success: true,
+      data: attendanceData,
+    });
+  } catch (error) {
+    console.error("Error fetching attendance data:", error);
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching attendance data.",
+    });
+  }
+};
+
 // Controller function to get attendance data between two dates
 exports.getAttendanceBetweenDates = async (req, res) => {
   try {

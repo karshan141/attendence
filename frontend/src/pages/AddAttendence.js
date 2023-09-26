@@ -1,55 +1,89 @@
-// components/MarkAllAttendance.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { axiosInstance } from "../services/apiConnector";
 import { attendanceApis, employeeApis } from "../services/apis";
 import Sidebar from "../components/Sidebar";
 import toast from "react-hot-toast";
 
-const AddAttendence = () => {
+const AddAttendance = () => {
   const [employees, setEmployees] = useState([]);
-  const [attendanceData, setAttendanceData] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
-
-  const fetchEmpployee = async () => {
-    const data = await axiosInstance.get(employeeApis.GET_ALL_EMPLOYEE_APPI);
-    setEmployees(data.data.data);
-  };
+  const [initialAttendanceData, setInitialAttendanceData] = useState({});
+  const [markedAttendance, setMarkedAttendance] = useState([]);
+  const [unmarkedAttendance, setUnmarkedAttendance] = useState([]);
 
   useEffect(() => {
-    fetchEmpployee();
+    const fetchEmployee = async () => {
+      const data = await axiosInstance.get(employeeApis.GET_ALL_EMPLOYEE_APPI);
+      setEmployees(data.data.data);
+    };
+    fetchEmployee();
   }, []);
 
-  const handleRadioChange = (employeeId, status) => {
-    // Check if an entry for the employee exists in attendanceData
-    const employeeIndex = attendanceData.findIndex(
-      (data) => data.employeeId === employeeId
-    );
-
-    if (employeeIndex !== -1) {
-      // If an entry exists, update its status
-      const updatedData = [...attendanceData];
-      updatedData[employeeIndex].status = status;
-      setAttendanceData(updatedData);
-    } else {
-      // If no entry exists, create a new entry
-      setAttendanceData([...attendanceData, { employeeId, status }]);
+  useEffect(() => {
+    if (selectedDate) {
+      const fetchInitialAttendanceData = async () => {
+        const result = await axiosInstance.get(
+          attendanceApis.GET_ATTENDANCE_DATA_FOR_DATE_API,
+          {
+            params: { date: selectedDate },
+          }
+        );
+        console.log(result.data.data);
+        if (result.data.success) {
+          const initialData = {};
+          result.data.data.forEach((item) => {
+            initialData[item.employeeId] = item.status;
+          });
+          setInitialAttendanceData(initialData);
+        }
+      };
+      fetchInitialAttendanceData();
     }
+  }, [selectedDate]);
+
+  useEffect(() => {
+    // Calculate marked and unmarked attendance
+    const marked = [];
+    const unmarked = [];
+
+    employees.forEach((employee) => {
+      if (initialAttendanceData[employee._id]) {
+        marked.push(employee);
+      } else {
+        unmarked.push(employee);
+      }
+    });
+
+    setMarkedAttendance(marked);
+    setUnmarkedAttendance(unmarked);
+  }, [initialAttendanceData, employees]);
+
+  const handleRadioChange = (employeeId, status) => {
+    setInitialAttendanceData({
+      ...initialAttendanceData,
+      [employeeId]: status,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const attendanceData = Object.keys(initialAttendanceData).map(
+      (employeeId) => ({
+        employeeId,
+        status: initialAttendanceData[employeeId],
+      })
+    );
+
     const result = await axiosInstance.post(attendanceApis.ADDATTENDENCE_API, {
-      date:selectedDate,
+      date: selectedDate,
       attendanceData,
     });
-    
-    if(result.data.success){
+
+    if (result.data.success) {
       toast.success(result.data.message);
-    }
-    else{
-      toast.error(result.data.message)
+    } else {
+      toast.error(result.data.message);
     }
   };
 
@@ -60,7 +94,6 @@ const AddAttendence = () => {
         <h2 className="text-2xl font-semibold mb-4">
           Mark Attendance for All Employees
         </h2>
-        <h4></h4>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="text-lg font-semibold">Select Date:</label>
@@ -85,11 +118,7 @@ const AddAttendence = () => {
                     name={`attendance-${employee._id}`}
                     value="present"
                     onChange={() => handleRadioChange(employee._id, "present")}
-                    checked={attendanceData.some(
-                      (data) =>
-                        data.employeeId === employee._id &&
-                        data.status === "present"
-                    )}
+                    checked={initialAttendanceData[employee._id] === "present"}
                     className="mr-2"
                   />
                   <span className="text-green-500">Present</span>
@@ -100,11 +129,7 @@ const AddAttendence = () => {
                     name={`attendance-${employee._id}`}
                     value="absent"
                     onChange={() => handleRadioChange(employee._id, "absent")}
-                    checked={attendanceData.some(
-                      (data) =>
-                        data.employeeId === employee._id &&
-                        data.status === "absent"
-                    )}
+                    checked={initialAttendanceData[employee._id] === "absent"}
                     className="mr-2"
                   />
                   <span className="text-red-500">Absent</span>
@@ -115,11 +140,7 @@ const AddAttendence = () => {
                     name={`attendance-${employee._id}`}
                     value="leave"
                     onChange={() => handleRadioChange(employee._id, "leave")}
-                    checked={attendanceData.some(
-                      (data) =>
-                        data.employeeId === employee._id &&
-                        data.status === "leave"
-                    )}
+                    checked={initialAttendanceData[employee._id] === "leave"}
                     className="mr-2"
                   />
                   <span className="text-blue-500">Leave</span>
@@ -134,9 +155,30 @@ const AddAttendence = () => {
             Submit
           </button>
         </form>
+
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Marked Attendance:</h3>
+          <ul>
+            {markedAttendance.map((employee) => (
+              <li key={employee._id}>
+                {`${employee.firstName} ${employee.lastName}`}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Unmarked Attendance:</h3>
+          <ul>
+            {unmarkedAttendance.map((employee) => (
+              <li key={employee._id}>
+                {`${employee.firstName} ${employee.lastName}`}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AddAttendence;
+export default AddAttendance;

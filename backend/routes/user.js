@@ -2,7 +2,7 @@ const express = require("express");
 const { login } = require("../controllers/login");
 const { addDesignation, getAllDesignation, deleteDesignation } = require("../controllers/designation");
 const { createEmployee, getAllEmployees } = require("../controllers/employee");
-const { addAttendence1, getAttendanceBetweenDates, addAttendance, getEmployeeAttendanceBetweenDates } = require("../controllers/attendence");
+const { addAttendence1, getAttendanceBetweenDates, addAttendance, getEmployeeAttendanceBetweenDates, getAttendanceSpecificDate } = require("../controllers/attendence");
 const { setWeeklyOff } = require("../controllers/weeklyoff");
 const { addPaidHolidays } = require("../controllers/paidHoliday");
 const router = express.Router();
@@ -25,6 +25,8 @@ router.delete("/deletedesignation/:id",deleteDesignation);
 
 router.post("/addattendence",addAttendance);
 router.get("/showattendence",getAttendanceBetweenDates);
+
+router.get("/showattendencedatespecific",getAttendanceSpecificDate);
 
 router.get("/showEmployeeattendence",getEmployeeAttendanceBetweenDates);
 

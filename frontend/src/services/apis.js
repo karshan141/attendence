@@ -21,6 +21,8 @@ export const employeeApis = {
 
 export const attendanceApis = {
   ADDATTENDENCE_API: BASE_URL + "/user/addattendence",
+  GET_ATTENDANCE_DATA_FOR_DATE_API:
+    BASE_URL + "/user/showattendencedatespecific",
 };
 
 export const weeklyOffApis = {
