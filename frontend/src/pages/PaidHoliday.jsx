@@ -70,8 +70,8 @@ function PaidHoliday() {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
+    <div className="flex items-center justify-center mt-8">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-[1000px]">
         <h2 className="text-2xl font-semibold mb-4">
           Add Paid Holidays for the Year
         </h2>

@@ -32,7 +32,11 @@ const AddAttendance = () => {
         if (result.data.success) {
           const initialData = {};
           result.data.data.forEach((item) => {
-            initialData[item.employeeId] = item.status;
+            if (["present", "absent"].includes(item.status)) {
+              initialData[item.employeeId] = item.status;
+            } else {
+              initialData[item.employeeId] = "leave"; // Set to "leave" for other statuses
+            }
           });
           setInitialAttendanceData(initialData);
         }
@@ -88,8 +92,7 @@ const AddAttendance = () => {
   };
 
   return (
-    <div className="flex">
-      <Sidebar />
+    
       <div className="container mx-auto mt-8 p-6 bg-white rounded shadow-lg">
         <h2 className="text-2xl font-semibold mb-4">
           Mark Attendance for All Employees
@@ -177,7 +180,7 @@ const AddAttendance = () => {
           </ul>
         </div>
       </div>
-    </div>
+    
   );
 };
 

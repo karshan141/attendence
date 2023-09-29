@@ -31,6 +31,7 @@ const Login = () => {
 
     if (resData.success) {
       toast.success("Login Successfuly Done");
+      window.location.href = "http://localhost:3000/dashbaord";
     } else {
       toast(resData.message, {
         icon: "👏",

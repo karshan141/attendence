@@ -70,10 +70,10 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState(null);
 
   return (
-    <div className="h-screen w-64 bg-gradient-to-b from-[#283367] to-[#0887C8] pt-[64px]">
+    <div className="h-full w-64 bg-gradient-to-b from-[#283367] to-[#0887C8]">
       <div className="flex text-white items-center gap-2 text-xl p-4 border-b-[1px] font-semibold opacity-80">
         <BiSolidDashboard />
-        <NavLink to="/dashbaord">
+        <NavLink to="/">
           <h2>Dashboard</h2>
         </NavLink>
       </div>
@@ -93,11 +93,12 @@ const Sidebar = () => {
       />
       <MenuItem
         label="Attendence"
-        subitems={["Add Attendence", "Attendence Muster", "View EmplyeeWise"]}
+        subitems={["Add Attendence", "Attendence Muster", "View EmplyeeWise","Edit Attendence"]}
         subitemsLinks={[
           "/addattendence",
           "/showattendence",
           "/showemployeeattendence",
+          "/editemployeeattendence",
         ]}
         icon=<BiSolidTime />
         openMenu={openMenu}
@@ -105,8 +106,8 @@ const Sidebar = () => {
       />
       <MenuItem
         label="Off Holiday"
-        subitems={["Add Off"]}
-        subitemsLinks={["/addoffday"]}
+        subitems={["Add Off", "Add PaidHoliday"]}
+        subitemsLinks={["/addoffday","/paidholiday"]}
         icon=<FcLeave />
         openMenu={openMenu}
         setOpenMenu={setOpenMenu}

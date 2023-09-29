@@ -23,6 +23,7 @@ export const attendanceApis = {
   ADDATTENDENCE_API: BASE_URL + "/user/addattendence",
   GET_ATTENDANCE_DATA_FOR_DATE_API:
     BASE_URL + "/user/showattendencedatespecific",
+    UPDATE_EMPLOYEE_ATTENDENCE_API : BASE_URL + "/user/editempattendence"
 };
 
 export const weeklyOffApis = {

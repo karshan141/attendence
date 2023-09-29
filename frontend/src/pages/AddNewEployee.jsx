@@ -63,9 +63,7 @@ const AddNewEmployee = () => {
   };
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="container bg-[#E6E6E6]">
+      <div>
         <div className="mt-12 bg-[#fff] m-4 py-6 px-12 rounded shadow">
           <form
             className="w-full flex flex-col gap-4 justify-start"
@@ -165,7 +163,7 @@ const AddNewEmployee = () => {
           </form>
         </div>
       </div>
-    </div>
+
   );
 };
 

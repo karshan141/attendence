@@ -39,7 +39,7 @@ const ShowEmployeeAttendence = () => {
   }, [startDate, endDate]);
 
   return (
-    <div className="bg-[#E4F4DA] min-h-screen">
+    <div>
       <h2>Set Employee Schedule</h2>
       <div>
         <label>Select Employee:</label>
