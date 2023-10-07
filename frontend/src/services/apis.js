@@ -9,6 +9,7 @@ export const addNewCategory = {
   ADDCATEGORY_API: BASE_URL + "/user/addnewdesignation",
   GET_ALL_CATEGORY_API: BASE_URL + "/user/getalldesignation",
   DELETECATEGORY_API: BASE_URL + "/user/deletedesignation",
+  EDITCATEGORY_API: BASE_URL + "/user/editdesignation",
 };
 
 export const getAllCategory = {
@@ -18,7 +19,7 @@ export const getAllCategory = {
 export const employeeApis = {
   ADDNEWEMPLOYEE_API: BASE_URL + "/user/addnewemployee",
   GET_ALL_EMPLOYEE_APPI: BASE_URL + "/user/getallemployee",
-  GET_TYPE_WISE_EMPLOYEE_APPI : BASE_URL + "/user/gettypewiseemp"
+  GET_TYPE_WISE_EMPLOYEE_APPI: BASE_URL + "/user/gettypewiseemp",
 };
 
 export const attendanceApis = {

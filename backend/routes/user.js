@@ -1,6 +1,6 @@
 const express = require("express");
 const { login } = require("../controllers/login");
-const { addDesignation, getAllDesignation, deleteDesignation } = require("../controllers/designation");
+const { addDesignation, getAllDesignation, deleteDesignation, editDesignation } = require("../controllers/designation");
 const { createEmployee, getAllEmployees, getTypeWiseEmployees } = require("../controllers/employee");
 const { addAttendence1, getAttendanceBetweenDates, addAttendance, getEmployeeAttendanceBetweenDates, getAttendanceSpecificDate, updateAttendance } = require("../controllers/attendence");
 const { setWeeklyOff } = require("../controllers/weeklyoff");
@@ -23,6 +23,7 @@ router.get("/gettypewiseemp",getTypeWiseEmployees);
 router.post("/addnewdesignation",addDesignation);
 router.get("/getalldesignation",getAllDesignation);
 router.delete("/deletedesignation/:id",deleteDesignation);
+router.put("/editdesignation",editDesignation);
 
 //Routes for attendence
 
