@@ -11,26 +11,24 @@ import AddOffDay from "./pages/AddoffDay";
 import ShowEmployeeAttendence from "./pages/ShowEmployeeAttendence";
 import PaidHoliday from "./pages/PaidHoliday";
 import EditEmployeeAttendence from "./pages/EditEmployeeAttendence";
+import DashboardData from "./pages/DashboardData";
 
 function App() {
+  
   return (
-    <div className="bg-slate-400 text-center">
+    <div>
       <Routes>
         <Route path="/" element={<Dashbord />}>
+          <Route path="/showattendence" element={<ShowAttendence />} />
           <Route path="/addemployee" element={<AddNewEployee />} />
           <Route
             path="/addemployeecategory"
             element={<AddEmployeeCategory />}
           />
           <Route path="/viewemployee" element={<ViewAllEmployee />} />
-
           <Route path="/addoffday" element={<AddOffDay />} />
-
           <Route path="/paidholiday" element={<PaidHoliday />} />
-
           <Route path="/addattendence" element={<AddAttendence />} />
-          <Route path="/showattendence" element={<ShowAttendence />} />
-
           <Route
             path="/showemployeeattendence"
             element={<ShowEmployeeAttendence />}
@@ -39,11 +37,10 @@ function App() {
             path="/editemployeeattendence"
             element={<EditEmployeeAttendence />}
           />
+          <Route path="/dashborddata" element={<DashboardData />} />
         </Route>
 
-        <Route path="/login" element={<Login />} />
-
-        {/* <Route path="/addemployee" element={<AddNewEployee />} /> */}
+        <Route path="/" element={<Login />} />
       </Routes>
     </div>
   );

@@ -70,10 +70,10 @@ const Sidebar = () => {
   const [openMenu, setOpenMenu] = useState(null);
 
   return (
-    <div className="h-full w-64 bg-gradient-to-b from-[#283367] to-[#0887C8]">
+    <div className="h-full w-full sm:w-64  bg-gradient-to-b from-[#283367] to-[#0887C8]">
       <div className="flex text-white items-center gap-2 text-xl p-4 border-b-[1px] font-semibold opacity-80">
         <BiSolidDashboard />
-        <NavLink to="/">
+        <NavLink to="/dashborddata">
           <h2>Dashboard</h2>
         </NavLink>
       </div>

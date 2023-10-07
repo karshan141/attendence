@@ -13,7 +13,6 @@ const AddOffDay = () => {
   const fetchEmpployee = async () => {
     const data = await axiosInstance.get(employeeApis.GET_ALL_EMPLOYEE_APPI);    
     setEmployees(data.data.data);
-    console.log(data.data.data);
   };
 
 

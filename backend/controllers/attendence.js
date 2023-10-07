@@ -10,6 +10,8 @@ const EmpPaidHoliday = require("../models/EmpPaidHoliday");
 
 const { formatDate } = require("../helper/commonuses");
 
+const Employee = require("../models/Employee");
+
 // Function to add attendance record
 exports.addAttendance = async (req, res) => {
   try {
@@ -217,11 +219,30 @@ exports.addAttendence1 = async (req, res) => {
 
 exports.getAttendanceSpecificDate = async (req, res) => {
   try {
-    const { date } = req.query; // Assuming the date is passed as a query parameter
+    const { date, category } = req.query; // Assuming the date is passed as a query parameter
 
+    if (!category) {
+      return res.status(200).json({
+        success: false,
+        message: "Select category first",
+      });
+    }
     // Query the database to retrieve attendance data for the specified date
-    const attendanceData = await Attendance.find({ date });
+    const employeesInCategory = await Employee.find({
+      category: category,
+    });
 
+    console.log(employeesInCategory);
+
+    const employeeIdsInCategory = employeesInCategory.map(
+      (employee) => employee._id
+    );
+
+    const attendanceData = await Attendance.find({
+      employeeId: { $in: employeeIdsInCategory },
+      date: date,
+    });
+    
     // Return the attendance data as a JSON response
     res.status(200).json({
       success: true,

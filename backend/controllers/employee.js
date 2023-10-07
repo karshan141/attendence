@@ -40,7 +40,25 @@ exports.createEmployee = async (req, res) => {
 exports.getAllEmployees = async (req, res) => {
   try {
     // Fetch all employees from the database
-    const employees = await Employee.find().populate('category');
+    const employees = await Employee.find().populate("category");
+    // Send the list of employees as a response
+    res.status(201).json({
+      success: true,
+      message: "Employee Fetched successfully",
+      data: employees,
+    });
+  } catch (error) {
+    // Handle any errors
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+exports.getTypeWiseEmployees = async (req, res) => {
+  try {
+    const { selectedCategory } = req.query; 
+    console.log(selectedCategory);
+    // Fetch all employees from the database
+    const employees = await Employee.find({category:selectedCategory}).populate("category");
     // Send the list of employees as a response
     res.status(201).json({
       success: true,

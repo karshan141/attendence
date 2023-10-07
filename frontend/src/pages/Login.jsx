@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../services/apiConnector";
 import { login } from "../services/apis";
 
-const Login = () => {
+const Login = ({ setIsAuth }) => {
   const [loginData, setLoginData] = useState({
     userName: "",
     password: "",
@@ -31,7 +31,8 @@ const Login = () => {
 
     if (resData.success) {
       toast.success("Login Successfuly Done");
-      window.location.href = "http://localhost:3000/dashbaord";
+      setIsAuth(true);
+      window.location.href = "http://localhost:3000/dashborddata";
     } else {
       toast(resData.message, {
         icon: "👏",
