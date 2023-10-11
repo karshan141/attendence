@@ -64,6 +64,13 @@ const AddEmployeeCategory = () => {
 
   // Handle deleting a category
   const handleDelete = async (id) => {
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+
+    if (!shouldDelete) {
+      return; // Do nothing if the user cancels the delete action.
+    }
     setLoader(true);
     try {
       const response = await axiosInstance.delete(
@@ -123,13 +130,15 @@ const AddEmployeeCategory = () => {
         <Loader />
       ) : (
         <div>
-        <div className="my-4 bg-[#EAECF4] px-4 py-2 rounded text-[1.2rem]">Employee / <span className="text-[#4E73DF]"> AddDesignation</span></div>
+          <div className="my-4 bg-[#EAECF4] px-4 py-2 rounded text-[1.2rem]">
+            Employee / <span className="text-[#4E73DF]"> AddDesignation</span>
+          </div>
           <div className="mt-8 bg-[#fff]  py-6 px-12 rounded shadow">
             <form
-              className="w-6/12 flex flex-col gap-4 justify-start"
+              className="w-full sm:w-6/12 flex flex-col gap-4  justify-start"
               onSubmit={handleAddCategory}
             >
-              <div className="flex flex-col gap-2 ">
+              <div className="flex flex-col gap-4 ">
                 <label className="font-bold max-w-fit">
                   Add New Designation
                 </label>
@@ -139,7 +148,7 @@ const AddEmployeeCategory = () => {
                   name="designation"
                   onChange={handleChange}
                   placeholder="Enter Employee Designation"
-                  className="border h-[40px] rounded w-8/12 p-4 border-gray-400"
+                  className="border h-[40px] rounded w-full sm:w-8/12 p-4 border-gray-400"
                 />
                 {fieldError && <div className="text-red-500">{fieldError}</div>}
               </div>
@@ -150,7 +159,7 @@ const AddEmployeeCategory = () => {
             </form>
           </div>
 
-          <div className="mt-12 bg-[#fff]   py-6 px-12 rounded shadow overflow-x-auto">
+          <div className="mt-12 bg-[#fff]   py-6  rounded shadow overflow-x-auto">
             {designationList.length > 0 ? (
               <table className="w-full whitespace-nowrap  text-center">
                 <thead>
