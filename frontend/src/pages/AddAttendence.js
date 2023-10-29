@@ -4,6 +4,7 @@ import { attendanceApis, employeeApis, getAllCategory } from "../services/apis";
 import toast from "react-hot-toast";
 import Loader from "../components/Loader";
 import DropDown from "../components/DropDown";
+import { Paginasion } from "../components/Paginasion";
 
 const AddAttendance = () => {
   const [employees, setEmployees] = useState([]);
@@ -25,7 +26,9 @@ const AddAttendance = () => {
   const fetchEmployee = async () => {
     setLoader(true);
     console.log(selectedCategory);
-    const data = await axiosInstance.get(`${employeeApis.GET_TYPE_WISE_EMPLOYEE_APPI}?selectedCategory=${selectedCategory}`);
+    const data = await axiosInstance.get(
+      `${employeeApis.GET_TYPE_WISE_EMPLOYEE_APPI}?selectedCategory=${selectedCategory}`
+    );
     setEmployees(data.data.data);
 
     setLoader(false);
@@ -45,7 +48,7 @@ const AddAttendance = () => {
         const result = await axiosInstance.get(
           attendanceApis.GET_ATTENDANCE_DATA_FOR_DATE_API,
           {
-            params: { date: selectedDate , category:selectedCategory},
+            params: { date: selectedDate, category: selectedCategory },
           }
         );
         if (result.data.success) {
@@ -115,6 +118,10 @@ const AddAttendance = () => {
 
   return (
     <div className="">
+      <div>
+      
+        <Paginasion main="Attendence" sub="Add Attendence" />
+      </div>
       {loader ? (
         <Loader />
       ) : (

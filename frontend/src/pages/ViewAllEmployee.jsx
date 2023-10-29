@@ -3,6 +3,7 @@ import { axiosInstance } from "../services/apiConnector";
 import { employeeApis } from "../services/apis";
 import ShowEmployee from "../components/ShowEmployee";
 import Loader from "../components/Loader";
+import { Paginasion } from "../components/Paginasion";
 
 const ViewAllEmployee = () => {
   const [employee, setEmployee] = useState([]);
@@ -21,6 +22,10 @@ const ViewAllEmployee = () => {
 
   return (
     <div>
+      <div>
+      
+        <Paginasion main="Employee" sub="View Employee" />
+      </div>
       {loader ? (
         <Loader />
       ) : (

@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import { axiosInstance } from "../services/apiConnector";
 import { addNewCategory, getAllCategory } from "../services/apis";
 import Loader from "../components/Loader";
+import { Paginasion } from "../components/Paginasion";
 
 const AddEmployeeCategory = () => {
   const [designation, setDesignation] = useState("");
@@ -130,8 +131,8 @@ const AddEmployeeCategory = () => {
         <Loader />
       ) : (
         <div>
-          <div className="my-4 bg-[#EAECF4] px-4 py-2 rounded text-[1.2rem]">
-            Employee / <span className="text-[#4E73DF]"> AddDesignation</span>
+          <div>
+            <Paginasion main="Employee" sub="AddDesignation" />
           </div>
           <div className="mt-8 bg-[#fff]  py-6 px-12 rounded shadow">
             <form

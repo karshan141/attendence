@@ -4,6 +4,7 @@ import { employeeApis, getAllCategory } from "../services/apis";
 import toast from "react-hot-toast";
 import DropDown from "../components/DropDown";
 import Loader from "../components/Loader";
+import { Paginasion } from "../components/Paginasion";
 
 const AddNewEmployee = () => {
   const [formData, setFormData] = useState({
@@ -66,11 +67,14 @@ const AddNewEmployee = () => {
 
   return (
     <div>
+      <div>      
+        <Paginasion main="Employee" sub="Add New Employee" />
+      </div>
       {loader ? (
         <Loader />
       ) : (
         <div>
-          <div className="mt-12 bg-[#fff] m-4 py-6 px-12 rounded shadow">
+          <div className="bg-[#fff] mt-8 py-6 px-12 rounded shadow">
             <form
               className="w-full flex flex-col gap-4 justify-start"
               onSubmit={handleSubmit}

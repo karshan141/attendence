@@ -14,11 +14,15 @@ const Dashbord = () => {
         <div>
           <Sidebar />
         </div>
-        <div className="mx-auto w-11/12 max-w-[1250px] ">
-          <Outlet />
+        <div className="w-full">
+          <div className="mx-auto w-11/12 max-w-[1250px] min-h-[calc(100vh-144px)]">
+            <Outlet />
+          </div>
+          <div className="h-[64px] bg-[#E6ECEC] flex items-center justify-center">
+            <Footer/>
+          </div>
         </div>
       </div>
-      
     </div>
   );
 };

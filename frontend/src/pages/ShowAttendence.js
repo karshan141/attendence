@@ -4,6 +4,7 @@ import { useReactToPrint } from "react-to-print";
 import { axiosInstance } from "../services/apiConnector";
 import { attendanceApis } from "../services/apis";
 import Loader from "../components/Loader";
+import { Paginasion } from "../components/Paginasion";
 
 const ShowAttendance = () => {
   //Print Functinality
@@ -82,25 +83,36 @@ const ShowAttendance = () => {
   });
   return (
     <div>
+      <div>
+        <Paginasion main="Attendence" sub="Show Attendence" />
+      </div>
       {loader ? (
         <Loader />
       ) : (
         <div>
-          <h2>Attendance Report</h2>
-          <div>
-            <label>Start Date:</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <label>End Date:</label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-            <button onClick={fetchAttendanceData}>Generate Report</button>
+          <div className="bg-[#fff] mt-8 py-6 px-12 rounded shadow flex flex-col gap-4">
+            <h2 className="text-2xl font-semibold">Attendance Report</h2>
+            <div className="flex items-end gap-8">
+              <div className="flex flex-col gap-2 font-semibold text-xl">
+                <label className="">Start Date:</label>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="border-2 rounded p-1 bg-[#EAECF4]"
+                />
+              </div>
+              <div className="flex flex-col gap-2 font-semibold text-xl">
+                <label>End Date:</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="border-2 rounded p-1 bg-[#EAECF4]"
+                />
+              </div>
+              <button className="bg-[#5C6ED8] py-2 px-4 rounded text-white hover:bg-[#ca8d5b]" onClick={fetchAttendanceData}>Generate Report</button>
+            </div>
           </div>
 
           <button
