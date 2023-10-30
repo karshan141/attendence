@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const DropDown = ({ designation, onSelect }) => {
+const DropDown = ({ designation, onSelect ,bgColor }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState("");
 
@@ -8,7 +8,7 @@ const DropDown = ({ designation, onSelect }) => {
   const filteredItems = designation.filter((item) =>
     item.designation.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  
   const handleItemClick = (item) => {
     setSelectedItem(item.designation); // Set the selected item
     setSearchTerm(""); // Set the search term to the selected item
@@ -24,7 +24,7 @@ const DropDown = ({ designation, onSelect }) => {
           type="text"
           name="category"
           placeholder="CATEGORY"
-          className="border border-[#1171AD] h-[40px] rounded w-full p-4"
+          className={`${bgColor ? `bg-[${bgColor}]` : ""} border border-[#1171AD] h-[40px] rounded w-full p-4 `}
           value={selectedItem}
         />
       </div>

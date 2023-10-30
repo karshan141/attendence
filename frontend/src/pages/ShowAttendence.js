@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import React, { useState,useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { axiosInstance } from "../services/apiConnector";
-import { attendanceApis } from "../services/apis";
+import { attendanceApis, getAllCategory } from "../services/apis";
 import Loader from "../components/Loader";
 import { Paginasion } from "../components/Paginasion";
+import DropDown from "../components/DropDown";
 
 const ShowAttendance = () => {
   //Print Functinality
@@ -13,7 +13,27 @@ const ShowAttendance = () => {
     content: () => componentRef.current,
   });
 
-  let pCount = 0;
+  //Fetch Designations
+  
+  const [designation, setDesignation] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const fetchDesignation = async () => {
+    setLoader(true);
+    const data = await axiosInstance.get(getAllCategory.GET_ALL_CATEGORY_API);
+    setDesignation(data.data.data);
+    setLoader(false);
+    console.log(designation);
+  };
+
+  useEffect(() => {
+    fetchDesignation();
+  }, []);
+
+  //Category Change event handler
+  const handleCategoryChange = (selectedItem) => {
+    setSelectedCategory(selectedItem._id); // Set the selected category ID    
+  };
+
 
   const [loader, setLoader] = useState(false);
 
@@ -27,7 +47,7 @@ const ShowAttendance = () => {
       const response = await axiosInstance.get(
         attendanceApis.ATTENDANCE_MUSTER_API,
         {
-          params: { startDate: startDate, endDate: endDate },
+          params: { startDate: startDate, endDate: endDate, category : selectedCategory },
         }
       );
 
@@ -37,12 +57,6 @@ const ShowAttendance = () => {
     }
     setLoader(false);
   };
-
-  useEffect(() => {
-    if (startDate && endDate) {
-      fetchAttendanceData();
-    }
-  }, [startDate, endDate]);
 
   // Extract unique dates
   const uniqueDates = [...new Set(attendanceData.map((entry) => entry.date))];
@@ -111,7 +125,25 @@ const ShowAttendance = () => {
                   className="border-2 rounded p-1 bg-[#EAECF4]"
                 />
               </div>
-              <button className="bg-[#5C6ED8] py-2 px-4 rounded text-white hover:bg-[#ca8d5b]" onClick={fetchAttendanceData}>Generate Report</button>
+
+              <div className="flex flex-col gap-2 font-semibold text-xl">
+                  <label>Category</label>     
+                  <div className="bg-[#EAECF4]">
+                  <DropDown
+                  bgColor={"#EAECF4"}
+                    designation={designation}
+                    onSelect={handleCategoryChange}
+                  />
+                  </div>             
+                </div>
+
+
+              <button
+                className="bg-[#5C6ED8] py-2 px-4 rounded text-white hover:bg-[#ca8d5b]"
+                onClick={fetchAttendanceData}
+              >
+                Generate Report
+              </button>
             </div>
           </div>
 
@@ -150,11 +182,6 @@ const ShowAttendance = () => {
                       <td className="border border-gray-600 p-2">{name}</td>
                       {uniqueDates.map((date) => {
                         const cellValue = formattedData[name][date];
-
-                        if (cellValue === "present") {
-                          pCount++; // Increment the count for each "P" value
-                        }
-
                         return (
                           <td key={date} className="border border-gray-600 p-2">
                             {["Leave", "leave", "present", "absent"].includes(

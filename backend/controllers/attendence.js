@@ -260,11 +260,11 @@ exports.getAttendanceSpecificDate = async (req, res) => {
 // Controller function to get attendance data between two dates
 exports.getAttendanceBetweenDates = async (req, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate , category } = req.query;
 
     // Fetch attendance data for the specified date range
     const attendanceData = await Attendance.find({
-      date: { $gte: startDate, $lte: endDate },
+      date: { $gte: startDate, $lte: endDate },      
     }).populate({
       path: "employeeId",
       select: "firstName", // Only select the first name
