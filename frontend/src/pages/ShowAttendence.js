@@ -21,8 +21,7 @@ const ShowAttendance = () => {
     setLoader(true);
     const data = await axiosInstance.get(getAllCategory.GET_ALL_CATEGORY_API);
     setDesignation(data.data.data);
-    setLoader(false);
-    console.log(designation);
+    setLoader(false);    
   };
 
   useEffect(() => {
@@ -31,7 +30,10 @@ const ShowAttendance = () => {
 
   //Category Change event handler
   const handleCategoryChange = (selectedItem) => {
-    setSelectedCategory(selectedItem._id); // Set the selected category ID    
+    setSelectedCategory({
+      _id: selectedItem._id,
+      name: selectedItem.designation // Adjust the property accordingly based on your data structure
+    });
   };
 
 
@@ -159,6 +161,7 @@ const ShowAttendance = () => {
           </style>
           <div className="overflow-x-auto">
             <div ref={componentRef}>
+            <div className="text-yellow-700 font-bold text-2xl my-2">Show Attendance For {selectedCategory.name} From {startDate} To {endDate} </div>
               <table className="border-collapse w-full text-center">
                 <thead>
                   <tr>
